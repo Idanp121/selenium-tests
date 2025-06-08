@@ -12,7 +12,7 @@ driver.get("https://www.google.com")
 search_box = driver.find_element("name", "q")
 
 # מקליד את הטקסט לשדה
-search_box.send_keys ("ynet")
+search_box.send_keys ("אח שלי היקר")
 
 # לוחץ על אנטר כדי לבצע את החיפוש
 search_box.send_keys(Keys.RETURN)
