@@ -1,47 +1,40 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
 import time
 
-# יצירת דפדפן
-driver = webdriver.Chrome()
-driver.get("https://demoqa.com/automation-practice-form")
+# רשימת המינים לבדיקה
+genders = ["Male", "Female", "Other"]
 
-# הגדלת המסך למניעת בעיות פריסה
-driver.maximize_window()
+# לולאה לכל מין
+for gender in genders:
+    driver = webdriver.Chrome()
+    driver.get("https://demoqa.com/automation-practice-form")
+    driver.maximize_window()
 
-# הזנת שם פרטי
-driver.find_element(By.ID, "firstName").send_keys("יוסי")
+    # מילוי שדות קבועים
+    driver.find_element(By.ID, "firstName").send_keys("יוסי")
+    driver.find_element(By.ID, "lastName").send_keys("כהן")
+    driver.find_element(By.ID, "userEmail").send_keys("yossi@example.com")
 
-# שם משפחה
-driver.find_element(By.ID, "lastName").send_keys("כהן")
+    # בחירת מין לפי הטקסט (משתנה בכל פעם בלולאה)
+    driver.find_element(By.XPATH, f"//label[text()='{gender}']").click()
 
-# אימייל
-driver.find_element(By.ID, "userEmail").send_keys("yossi@example.com")
+    driver.find_element(By.ID, "userNumber").send_keys("0501234567")
+    driver.find_element(By.XPATH, "//label[text()='Sports']").click()
+    driver.find_element(By.ID, "currentAddress").send_keys("רחוב הדוגמה 5, תל אביב")
 
-# בחירת מין (Male)
-driver.find_element(By.XPATH, "//label[text()='Male']").click()
+    # גלילה למטה כדי שהכפתור יהיה גלוי
+    driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
 
-# מספר טלפון
-driver.find_element(By.ID, "userNumber").send_keys("0501234567")
+    # שליחת הטופס
+    driver.find_element(By.ID, "submit").click()
 
-# בחירת תאריך לידה (לחיצה ואז בחירה דרך JavaScript או עם חיצים – דילגנו לצורך פשטות)
+    # המתנה לפופאפ – רק לראות שהטופס נקלט
+    time.sleep(6)
 
-# בחירת תחביב: Sports
-driver.find_element(By.XPATH, "//label[text()='Sports']").click()
+    # סגירת הפופאפ – כדי שההרצה תוכל להתקדם (או סגירת דפדפן)
+    driver.find_element(By.ID, "closeLargeModal").click()
 
-# הזנת כתובת
-driver.find_element(By.ID, "currentAddress").send_keys("רחוב הדוגמה 5, תל אביב")
+    # סגירת הדפדפן
+    driver.quit()
 
-# גלילה למטה (חשוב!)
-driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-
-# שליחת טופס
-driver.find_element(By.ID, "submit").click()
-
-# המתנה קצרה לראות את הפופאפ
-time.sleep(3)
-
-# סגירת דפדפן
-driver.quit()
